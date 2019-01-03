@@ -1,6 +1,6 @@
-from pytorch.Worker import Worker
-from pytorch.Model import Model
-from pytorch.Statistics import Statistics
+from Worker import Worker
+from Model import Model
+from Statistics import Statistics
 
 import torch
 import torch.optim as opt
@@ -54,7 +54,7 @@ def simulate(episode, workers, model, optim, rewardQueue, batch_save, path):
 if __name__ == '__main__':
     mp.set_start_method('spawn')
 
-    roms_path = "../roms"
+    roms_path = "../../"
     frameRatio = 2
     framesPerStep = 3
     learning_rate = 5e-5

@@ -2,7 +2,7 @@ import torch
 import torch.multiprocessing as mp
 from torch.autograd import Variable
 import torch.nn.functional as F
-import pytorch.WorkerUtils as wu
+import WorkerUtils as wu
 from MAMEToolkit.sf_environment import Environment
 import traceback
 import logging
@@ -69,16 +69,21 @@ class Worker(mp.Process):
 
                 frames, r, round_done, stage_done, game_done = self.env.step(moveAction, attackAction)
 
+                if game_done == True:
+                    print('!!!!!GAME IS DONE!!!!!')
+                    print(r)
+                    
                 histories[total_round]["reward"].append(torch.FloatTensor(1).fill_(r["P1"]))
 
                 epoch_reward += r["P1"]
 
                 if round_done:
                     total_round += 1
-                    histories.append({"moveAction": [], "attackAction": [], "reward": []})
-                    observations.append([])
                     if game_done:
                         self.rewardQueue.put({"reward": epoch_reward, "stage": self.env.stage})
+                    else:
+                        histories.append({"moveAction": [], "attackAction": [], "reward": []})
+                        observations.append([])
                     frames = self.env.reset()
 
         return observations, histories, frames
